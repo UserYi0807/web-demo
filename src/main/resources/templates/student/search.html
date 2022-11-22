@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery-3.6.1.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <form action="" method="post" class="form-inline">
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" placeholder="输入ID">
+            <button id="search" class="btn btn-primary">查询</button>
+        </div>
+    </form>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>成绩</th>
+        </tr>
+        </thead>
+        <tbody id="studentTb">
+        </tbody>
+    </table>
+</div>
+<script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $("#search").click(
+            function (e) {
+                e.preventDefault();
+                var id = $("#id").val();
+                console.log("id");
+                $.ajax({
+                    url:'/webapi/student/list'
+                }).done(function (rs) {
+                    var len = rs.length;
+                    var html = "";
+                    var isFound = false;
+                    for (var i = 0; i < len; i++) {
+                        var item = rs[i];
+                        if (isFound) {
+                            break;
+                        }
+                        if (item.id.toString() === id) {
+                            html += "<tr>" +
+                                "<td>" + item.id + "</td>" +
+                                "<td>" + item.name + "</td>" +
+                                "<td>" + item.sex + "</td>" +
+                                "<td>" + item.score + "</td>" +
+                                +"</tr>";
+                            isFound = true;
+                        }
+                    }
+                    if (!isFound) {
+                        alert("没人");
+                        return;
+                    }
+                    $("#studentTb").html(html);
+                })
+            }
+        )
+    })
+</script>
+</body>
+</html>

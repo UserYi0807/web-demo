@@ -3,31 +3,22 @@ package cn.ctbu.demo.service;
 import cn.ctbu.demo.domain.Student;
 import cn.ctbu.demo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class StudentService {
+public interface StudentService {
+    List<Student> findAll();
 
-    @Autowired
-    private StudentRepository studentRepository;
+    Student insert(Student student);
 
-    public List<Student> findAll() {
-        return studentRepository.findAll();
-    }
+    void delete(Student student);
 
-    public Student insert(Student student) {
-        return studentRepository.save(student);
-    }
+    Student getById(int id);
 
-    public void delete(Student student) {
-        studentRepository.delete(student);
-    }
-
-    public Student getById(int id) {
-
-        return studentRepository.findById(id).orElse(null);
-    }
-
+    /*只支持分页的查询*/
+    Page<Student> findAll(Pageable pageable);
 }

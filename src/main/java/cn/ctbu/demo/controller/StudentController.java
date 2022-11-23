@@ -26,4 +26,11 @@ public class StudentController {
 
         return "/student/search";
     }
+
+    @RequestMapping("/student/listbak")
+    public String temp(Model model) {
+        List<Student> students = studentService.findAll();
+        model.addAttribute("data", students);
+        return "/student/listbak";
+    }
 }

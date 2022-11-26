@@ -4,6 +4,7 @@ import cn.ctbu.demo.domain.Student;
 import cn.ctbu.demo.repository.StudentRepository;
 import cn.ctbu.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,10 @@ public class StudentImplService implements StudentService {
     @Override
     public Page<Student> findAll(Pageable pageable) {
         return studentRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Student> findAll(Example<Student> studentExample, Pageable pageable) {
+        return studentRepository.findAll(studentExample, pageable);
     }
 }

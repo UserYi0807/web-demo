@@ -16,7 +16,18 @@
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" onclick="reset()">
         新增学生
     </button>
-    基本页面
+
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="idInput">输入ID</label>
+            <input type="text" class="form-control" id="idInput" placeholder="输入ID">
+            <label for="nameInput">输入姓名</label>
+            <input type="text" class="form-control" id="nameInput" placeholder="输入姓名">
+            <button type="button" class="btn btn-primary" onclick="search()">查询</button>
+        </div>
+    </form>
+
+
     <table class="table table-hover" id="stuTable">
 
     </table>
@@ -70,13 +81,18 @@
         loadTable();
     })
 
+    function search() {
+        loadTable();
+    }
+
     function loadTable() {
+        $('#stuTable').bootstrapTable("destroy");
         $('#stuTable').bootstrapTable({
             url: '/webapi/student/getByPage',
             striped: true,
             pagination: true,
             singleSelect: false,
-            pageSize: 3,
+            pageSize: 4,
             pageNumber: 1,
             sidePagination: "server",
             queryParams: function (params) {
@@ -84,9 +100,10 @@
                     size: params.limit,
                     page: params.offset/params.limit,
                     sort: "id",
-                    direct: "desc"
+                    direct: "desc",
+                    name:$("#nameInput").val(),
+                    id:$("#idInput").val()
                 };
-
                 return paraObj;
             },
             columns: [{
@@ -101,6 +118,18 @@
             }, {
                 field: 'score',
                 title: '成绩'
+            }, {
+                field: 'id',
+                title: '编辑',
+                formatter: function (field) {
+                    return ("<a href='#' onclick='editStudent("+field+");'>编辑</a>")
+                }
+            }, {
+                field: 'id',
+                title: '删除',
+                formatter: function (field) {
+                    return ("<a href='#' onclick='deleteStudent("+field+");'>删除</a>")
+                }
             }]
         })
     }
@@ -117,7 +146,6 @@
 
     function addStudent() {
         var data = $("#formStudent").serialize();
-
 
         $.ajax({
             url: "/webapi/student/insert",
@@ -147,17 +175,18 @@
 
     function deleteStudent(id) {
 
+        if (confirm("确认删除？ " + id)) {
+            $.ajax({
+                url: '/webapi/student/delete',
+                data: {
+                    id: id
+                },
+                method: 'put'
+            }).done(function () {
 
-        $.ajax({
-            url: '/webapi/student/delete',
-            data: {
-                id: id
-            },
-            method: 'put'
-        }).done(function () {
-            alert("删除" + id)
-            loadTable();
-        })
+                loadTable();
+            })
+        }
     }
 
     function editConfirm() {

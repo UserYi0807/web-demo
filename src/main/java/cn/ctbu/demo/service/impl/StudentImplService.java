@@ -1,6 +1,8 @@
 package cn.ctbu.demo.service.impl;
 
 import cn.ctbu.demo.domain.Student;
+import cn.ctbu.demo.exception.REnum;
+import cn.ctbu.demo.exception.RException;
 import cn.ctbu.demo.repository.StudentRepository;
 import cn.ctbu.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +44,14 @@ public class StudentImplService implements StudentService {
     @Override
     public Page<Student> findAll(Example<Student> studentExample, Pageable pageable) {
         return studentRepository.findAll(studentExample, pageable);
+    }
+
+    public Student findByNameAndPassword(String name, String password) throws Exception{
+        List<Student> byNameAndPassword = studentRepository.findByNameAndPassword(name, password);
+        if (byNameAndPassword.size() > 0) {
+            return byNameAndPassword.get(0);
+        } else {
+            throw new RException(REnum.LOGIN_ERR);
+        }
     }
 }

@@ -46,12 +46,16 @@ public class StudentImplService implements StudentService {
         return studentRepository.findAll(studentExample, pageable);
     }
 
-    public Student findByNameAndPassword(String name, String password) throws Exception{
+    public Student findByNameAndPassword2(String name, String password) throws Exception{
         List<Student> byNameAndPassword = studentRepository.findByNameAndPassword(name, password);
         if (byNameAndPassword.size() > 0) {
             return byNameAndPassword.get(0);
         } else {
             throw new RException(REnum.LOGIN_ERR);
         }
+    }
+
+    public List<Student> findByNameAndPassword(String name, String password){
+        return studentRepository.findByNameAndPassword(name, password);
     }
 }

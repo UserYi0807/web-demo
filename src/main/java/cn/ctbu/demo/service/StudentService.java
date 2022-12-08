@@ -25,5 +25,7 @@ public interface StudentService {
 
     Page<Student> findAll(Example<Student> studentExample, Pageable pageable);
 
-    Student findByNameAndPassword(String name, String password) throws Exception;
+    Student findByNameAndPassword2(String name, String password) throws Exception;
+
+    List<Student> findByNameAndPassword(String name, String password);
 }
